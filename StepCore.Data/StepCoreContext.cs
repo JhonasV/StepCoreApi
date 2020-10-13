@@ -15,6 +15,7 @@ namespace StepCore
 
         }
 
-        public DbSet<Skills> Skills { get; set; }
+        public DbSet<Compentencies> Compentencies { get; set; }
+        public DbSet<Languages> Languages { get; set; }
     }
 }

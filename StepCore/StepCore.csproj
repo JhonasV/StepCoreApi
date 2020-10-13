@@ -17,5 +17,9 @@
     <ProjectReference Include="..\StepCore.Data\StepCore.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ViewModels\Compentencies\" />
+  </ItemGroup>
+
 
 </Project>

@@ -32,7 +32,8 @@ namespace StepCore
             services.AddDbContext<StepCoreContext>(option => option.UseSqlite(connString));
 
             //DI
-            services.AddTransient<ISkillsRepository, SkillsRepository>();
+            services.AddTransient<ICompentenciesRepository, CompentenciesRepository>();
+            services.AddTransient<ILanguagesRepository, LanguagesRepository>();
             services.AddControllers();
         }
 
