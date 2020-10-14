@@ -47,7 +47,7 @@ namespace StepCore.Controllers
             if (id != employees.Id)
                 return NotFound();
 
-            await _genericRepository.UpdateAsync(employees);
+             _genericRepository.Update(employees);
             return Ok(await _genericRepository.SaveAsync());
         }
 

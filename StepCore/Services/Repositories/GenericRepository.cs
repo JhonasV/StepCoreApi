@@ -47,7 +47,7 @@ namespace StepCore.Services.Repositories
            return await _stepCoreContext.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> UpdateAsync(T obj)
+        public bool Update(T obj)
         {
             _table.Attach(obj);
             _stepCoreContext.Entry(obj).State = EntityState.Modified;

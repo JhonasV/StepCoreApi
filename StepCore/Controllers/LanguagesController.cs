@@ -44,7 +44,7 @@ namespace StepCore.Controllers
             if (id != languages.Id)
                 return NotFound();
 
-            await _genericRepository.UpdateAsync(languages);
+             _genericRepository.Update(languages);
             return Ok(await _genericRepository.SaveAsync());
         }
         [HttpDelete("{id}")]

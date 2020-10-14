@@ -51,7 +51,7 @@ namespace StepCore.Controllers
             if(!ModelState.IsValid || id != compentencies.Id)
                  return BadRequest(ModelState);
 
-            await _genericRepository.UpdateAsync(compentencies);
+             _genericRepository.Update(compentencies);
             return Ok(await _genericRepository.SaveAsync());
         }
 

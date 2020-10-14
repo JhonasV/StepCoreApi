@@ -47,7 +47,7 @@ namespace StepCore.Controllers
             if (id != laborExperiences.Id)
                 return NotFound();
 
-            await _genericRepository.UpdateAsync(laborExperiences);
+             _genericRepository.Update(laborExperiences);
             return Ok(await _genericRepository.SaveAsync());
         }
 

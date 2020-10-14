@@ -47,7 +47,7 @@ namespace StepCore.Controllers
             if (id != trainings.Id)
                 return NotFound();
 
-            await _genericRepository.UpdateAsync(trainings);
+             _genericRepository.Update(trainings);
             return Ok(await _genericRepository.SaveAsync());
         }
 
