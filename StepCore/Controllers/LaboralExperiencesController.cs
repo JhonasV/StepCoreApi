@@ -1,25 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.Extensions.Logging;
 using StepCore.Entities;
 using StepCore.Services.Interfaces;
-using StepCore.Services.Repositories;
 
 namespace StepCore.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class CompentenciesController : ControllerBase
+    public class LaborExperiencesController : ControllerBase
     {
-        private readonly IGenericRepository<Compentencies> _genericRepository;
+        private readonly IGenericRepository<LaborExperiences> _genericRepository;
 
-        public CompentenciesController(IGenericRepository<Compentencies> genericRepository)
+        public LaborExperiencesController(IGenericRepository<LaborExperiences> genericRepository)
         {
             _genericRepository = genericRepository;
         }
@@ -37,21 +30,24 @@ namespace StepCore.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Compentencies skills)
+        public async Task<IActionResult> Create(LaborExperiences LaborExperiences)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            await _genericRepository.CreateAsync(skills);
+            await _genericRepository.CreateAsync(LaborExperiences);
             return Ok(await _genericRepository.SaveAsync());
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([Required] int id, Compentencies compentencies)
+        public async Task<IActionResult> Update([Required] int id, LaborExperiences laborExperiences)
         {
-            if(!ModelState.IsValid || id != compentencies.Id)
-                 return BadRequest(ModelState);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            await _genericRepository.UpdateAsync(compentencies);
+            if (id != laborExperiences.Id)
+                return NotFound();
+
+            await _genericRepository.UpdateAsync(laborExperiences);
             return Ok(await _genericRepository.SaveAsync());
         }
 
@@ -60,7 +56,6 @@ namespace StepCore.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
 
             await _genericRepository.RemoveAsync(id);
             return Ok(await _genericRepository.SaveAsync());
