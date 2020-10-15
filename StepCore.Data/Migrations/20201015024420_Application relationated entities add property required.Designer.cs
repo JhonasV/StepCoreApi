@@ -10,8 +10,8 @@ using StepCore;
 namespace StepCore.Data.Migrations
 {
     [DbContext(typeof(StepCoreContext))]
-    [Migration("20201014023438_initial migration")]
-    partial class initialmigration
+    [Migration("20201015024420_Application relationated entities add property required")]
+    partial class Applicationrelationatedentitiesaddpropertyrequired
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,9 +27,6 @@ namespace StepCore.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CompentenciesId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("datetime2");
@@ -47,9 +44,6 @@ namespace StepCore.Data.Migrations
                     b.Property<int>("JobPositionsId")
                         .HasColumnType("int");
 
-                    b.Property<int>("LaborExperiencesId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(100)")
@@ -63,6 +57,83 @@ namespace StepCore.Data.Migrations
                     b.Property<double>("SalaryAspiration")
                         .HasColumnType("float");
 
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Applicants");
+                });
+
+            modelBuilder.Entity("StepCore.Entities.ApplicantsCompentencies", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ApplicantsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CompentenciesId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicantsId");
+
+                    b.HasIndex("CompentenciesId");
+
+                    b.ToTable("ApplicantsCompentencies");
+                });
+
+            modelBuilder.Entity("StepCore.Entities.ApplicantsLaborExperiences", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ApplicantsId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("LaborExperiencesId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicantsId");
+
+                    b.HasIndex("LaborExperiencesId");
+
+                    b.ToTable("ApplicantsLaborExperiences");
+                });
+
+            modelBuilder.Entity("StepCore.Entities.ApplicantsTrainings", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ApplicantsId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("TrainingsId")
                         .HasColumnType("int");
 
@@ -71,7 +142,11 @@ namespace StepCore.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Applicants");
+                    b.HasIndex("ApplicantsId");
+
+                    b.HasIndex("TrainingsId");
+
+                    b.ToTable("ApplicantsTrainings");
                 });
 
             modelBuilder.Entity("StepCore.Entities.Compentencies", b =>
@@ -123,7 +198,7 @@ namespace StepCore.Data.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<string>("DocumentId")
+                    b.Property<string>("DocumentNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(20)")
                         .HasMaxLength(20);
@@ -299,6 +374,51 @@ namespace StepCore.Data.Migrations
                     b.HasIndex("ApplicantsId");
 
                     b.ToTable("Trainings");
+                });
+
+            modelBuilder.Entity("StepCore.Entities.ApplicantsCompentencies", b =>
+                {
+                    b.HasOne("StepCore.Entities.Applicants", "Applicant")
+                        .WithMany()
+                        .HasForeignKey("ApplicantsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("StepCore.Entities.Compentencies", "Compentencie")
+                        .WithMany()
+                        .HasForeignKey("CompentenciesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("StepCore.Entities.ApplicantsLaborExperiences", b =>
+                {
+                    b.HasOne("StepCore.Entities.Applicants", "Applicant")
+                        .WithMany()
+                        .HasForeignKey("ApplicantsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("StepCore.Entities.LaborExperiences", "LaborExperience")
+                        .WithMany()
+                        .HasForeignKey("LaborExperiencesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("StepCore.Entities.ApplicantsTrainings", b =>
+                {
+                    b.HasOne("StepCore.Entities.Applicants", "Applicant")
+                        .WithMany()
+                        .HasForeignKey("ApplicantsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("StepCore.Entities.Trainings", "Training")
+                        .WithMany()
+                        .HasForeignKey("TrainingsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("StepCore.Entities.Compentencies", b =>

@@ -20,9 +20,6 @@ namespace StepCore.Data.Migrations
                     JobPositionsId = table.Column<int>(nullable: false),
                     Department = table.Column<string>(maxLength: 50, nullable: false),
                     SalaryAspiration = table.Column<double>(nullable: false),
-                    CompentenciesId = table.Column<int>(nullable: false),
-                    TrainingsId = table.Column<int>(nullable: false),
-                    LaborExperiencesId = table.Column<int>(nullable: false),
                     RecommendedBy = table.Column<string>(maxLength: 50, nullable: false)
                 },
                 constraints: table =>
@@ -122,7 +119,7 @@ namespace StepCore.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CreateAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
-                    DocumentId = table.Column<string>(maxLength: 20, nullable: false),
+                    DocumentNumber = table.Column<string>(maxLength: 20, nullable: false),
                     Name = table.Column<string>(maxLength: 100, nullable: false),
                     DateOfAdmission = table.Column<DateTime>(nullable: false),
                     Department = table.Column<string>(maxLength: 50, nullable: false),
@@ -173,6 +170,120 @@ namespace StepCore.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ApplicantsCompentencies",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreateAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: false),
+                    ApplicantsId = table.Column<int>(nullable: false),
+                    CompentenciesId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicantsCompentencies", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ApplicantsCompentencies_Applicants_ApplicantsId",
+                        column: x => x.ApplicantsId,
+                        principalTable: "Applicants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ApplicantsCompentencies_Compentencies_CompentenciesId",
+                        column: x => x.CompentenciesId,
+                        principalTable: "Compentencies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ApplicantsTrainings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreateAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: false),
+                    ApplicantsId = table.Column<int>(nullable: false),
+                    TrainingsId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicantsTrainings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ApplicantsTrainings_Applicants_ApplicantsId",
+                        column: x => x.ApplicantsId,
+                        principalTable: "Applicants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ApplicantsTrainings_Trainings_TrainingsId",
+                        column: x => x.TrainingsId,
+                        principalTable: "Trainings",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ApplicantsLaborExperiences",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreateAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: false),
+                    ApplicantsId = table.Column<int>(nullable: false),
+                    LaborExperiencesId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicantsLaborExperiences", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ApplicantsLaborExperiences_Applicants_ApplicantsId",
+                        column: x => x.ApplicantsId,
+                        principalTable: "Applicants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ApplicantsLaborExperiences_LaborExperiences_LaborExperiencesId",
+                        column: x => x.LaborExperiencesId,
+                        principalTable: "LaborExperiences",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApplicantsCompentencies_ApplicantsId",
+                table: "ApplicantsCompentencies",
+                column: "ApplicantsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApplicantsCompentencies_CompentenciesId",
+                table: "ApplicantsCompentencies",
+                column: "CompentenciesId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApplicantsLaborExperiences_ApplicantsId",
+                table: "ApplicantsLaborExperiences",
+                column: "ApplicantsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApplicantsLaborExperiences_LaborExperiencesId",
+                table: "ApplicantsLaborExperiences",
+                column: "LaborExperiencesId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApplicantsTrainings_ApplicantsId",
+                table: "ApplicantsTrainings",
+                column: "ApplicantsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApplicantsTrainings_TrainingsId",
+                table: "ApplicantsTrainings",
+                column: "TrainingsId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Compentencies_ApplicantsId",
                 table: "Compentencies",
@@ -202,16 +313,25 @@ namespace StepCore.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Compentencies");
+                name: "ApplicantsCompentencies");
+
+            migrationBuilder.DropTable(
+                name: "ApplicantsLaborExperiences");
+
+            migrationBuilder.DropTable(
+                name: "ApplicantsTrainings");
 
             migrationBuilder.DropTable(
                 name: "Employees");
 
             migrationBuilder.DropTable(
-                name: "LaborExperiences");
+                name: "Languages");
 
             migrationBuilder.DropTable(
-                name: "Languages");
+                name: "Compentencies");
+
+            migrationBuilder.DropTable(
+                name: "LaborExperiences");
 
             migrationBuilder.DropTable(
                 name: "Trainings");

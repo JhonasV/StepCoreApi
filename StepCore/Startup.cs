@@ -42,6 +42,7 @@ namespace StepCore
             services.AddTransient<IGenericRepository<JobPositions>, GenericRepository<JobPositions>>();
             services.AddTransient<IGenericRepository<Applicants>, GenericRepository<Applicants>>();
             services.AddTransient<IGenericRepository<LaborExperiences>, GenericRepository<LaborExperiences>>();
+            services.AddTransient<IApplicantsRepository, ApplicantsRepository>();
 
             services.AddControllers();
         }

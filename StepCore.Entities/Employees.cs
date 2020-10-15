@@ -10,7 +10,7 @@ namespace StepCore.Entities
     {
 
         [Required, StringLength(20)]
-        public string DocumentId { get; set; }
+        public string DocumentNumber { get; set; }
         [Required, StringLength(100)]
         public string Name { get; set; }
         

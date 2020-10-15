@@ -22,5 +22,8 @@ namespace StepCore
         public DbSet<Applicants> Applicants { get; set; }
         public DbSet<LaborExperiences> LaborExperiences { get; set; }
         public DbSet<Employees> Employees { get; set; }
+        public DbSet<ApplicantsCompentencies> ApplicantsCompentencies { get; set; }
+        public DbSet<ApplicantsLaborExperiences> ApplicantsLaborExperiences { get; set; }
+        public DbSet<ApplicantsTrainings> ApplicantsTrainings { get; set; }
     }
 }

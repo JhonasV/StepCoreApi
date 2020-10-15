@@ -10,23 +10,23 @@ namespace StepCore.Controllers
     [ApiController]
     public class ApplicantsController : ControllerBase
     {
-        private readonly IGenericRepository<Applicants> _genericRepository;
+        private readonly IApplicantsRepository _applicantsRepository;
 
-        public ApplicantsController(IGenericRepository<Applicants> genericRepository)
+        public ApplicantsController(IApplicantsRepository applicantsRepository)
         {
-            _genericRepository = genericRepository;
+            _applicantsRepository = applicantsRepository;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public IActionResult Get()
         {
-            return Ok(await _genericRepository.GetAsync());
+            return Ok( _applicantsRepository.GetWithIncludes());
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            return Ok(await _genericRepository.GetByIdAsync(id));
+            return Ok(await _applicantsRepository.GetByIdAsync(id));
         }
 
         [HttpPost]
@@ -34,8 +34,8 @@ namespace StepCore.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            await _genericRepository.CreateAsync(applicants);
-            return Ok(await _genericRepository.SaveAsync());
+            await _applicantsRepository.CreateAsync(applicants);
+            return Ok(await _applicantsRepository.SaveAsync());
         }
 
         [HttpPut("{id}")]
@@ -47,8 +47,8 @@ namespace StepCore.Controllers
             if (id != applicants.Id)
                 return NotFound();
 
-             _genericRepository.Update(applicants);
-            return Ok(await _genericRepository.SaveAsync());
+            _applicantsRepository.Update(applicants);
+            return Ok(await _applicantsRepository.SaveAsync());
         }
 
         [HttpDelete("{id}")]
@@ -57,8 +57,38 @@ namespace StepCore.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            await _genericRepository.RemoveAsync(id);
-            return Ok(await _genericRepository.SaveAsync());
+            await _applicantsRepository.RemoveAsync(id);
+            return Ok(await _applicantsRepository.SaveAsync());
+        }
+
+        [HttpPost("compentencies")]
+        public async Task<IActionResult> AddCompetenciesRel(ApplicantsCompentencies applicantsCompentencies)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            return Ok(await _applicantsRepository.AddCompentenciesRel(applicantsCompentencies));
+        }
+
+
+        [HttpPost]
+        [Route("trainings")]
+        public async Task<IActionResult> AddTrainingsRel(ApplicantsTrainings applicantsTrainings)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            return Ok(await _applicantsRepository.AddTrainingsRel(applicantsTrainings));
+        }
+
+        [HttpPost]
+        [Route("laborexperiences")]
+        public async Task<IActionResult> AddLaborExperiencesRel(ApplicantsLaborExperiences applicantsLaborExperiences)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            return Ok(await _applicantsRepository.AddLaborExperiencesRel(applicantsLaborExperiences));
         }
     }
 }
