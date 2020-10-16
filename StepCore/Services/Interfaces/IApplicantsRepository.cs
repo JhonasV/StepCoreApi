@@ -15,5 +15,8 @@ namespace StepCore.Services.Interfaces
         List<Trainings> GetApplicantTrainings(int applicantId);
         List<Compentencies> GetApplicantCompentencies(int applicantId);
         List<LaborExperiences> GetApplicantLaborExperiences(int applicantId);
+        Task<bool> RemoveApplicantTrainingsRel(int applicationTrainingsId);
+        Task<bool> RemoveApplicantCompentenciesRel(int applicationTrainingsId);
+        Task<bool> RemoveApplicantLaborExperiencesRel(int applicationTrainingsId);
     }
 }

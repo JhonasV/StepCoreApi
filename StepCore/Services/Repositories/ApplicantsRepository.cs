@@ -5,6 +5,7 @@ using StepCore.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Z.EntityFramework.Plus;
 
 namespace StepCore.Services.Repositories
 {
@@ -83,6 +84,26 @@ namespace StepCore.Services.Repositories
                 .Include(e => e.Training)
                 .Select(e => e.Training)
                 .ToList();
+        }
+
+        public async Task<bool> RemoveApplicantTrainingsRel(int applicationTrainingsId)
+        {
+            return await _stepCoreContext
+                .ApplicantsTrainings
+                .DeleteFromQueryAsync(e => new ApplicantsTrainings { Id = applicationTrainingsId }) > 0;
+        }
+
+        public async Task<bool> RemoveApplicantCompentenciesRel(int applicantCompetenciesId)
+        {
+             return await _stepCoreContext
+                .ApplicantsCompentencies
+                .DeleteFromQueryAsync(e => new ApplicantsCompentencies { Id = applicantCompetenciesId }) > 0;
+        }
+
+        public async Task<bool> RemoveApplicantLaborExperiencesRel(int laborExperiencesId)
+        {
+            return await _stepCoreContext.ApplicantsLaborExperiences
+            .DeleteFromQueryAsync(e => new ApplicantsLaborExperiences { Id = laborExperiencesId}) > 0;
         }
     }
 }

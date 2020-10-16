@@ -71,8 +71,7 @@ namespace StepCore.Controllers
         }
 
 
-        [HttpPost]
-        [Route("trainings")]
+        [HttpPost("trainings")]
         public async Task<IActionResult> AddTrainingsRel(ApplicantsTrainings applicantsTrainings)
         {
             if (!ModelState.IsValid)
@@ -81,14 +80,41 @@ namespace StepCore.Controllers
             return Ok(await _applicantsRepository.AddTrainingsRel(applicantsTrainings));
         }
 
-        [HttpPost]
-        [Route("laborexperiences")]
+        [HttpPost("laborexperiences")]
         public async Task<IActionResult> AddLaborExperiencesRel(ApplicantsLaborExperiences applicantsLaborExperiences)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             return Ok(await _applicantsRepository.AddLaborExperiencesRel(applicantsLaborExperiences));
+        }
+
+        [HttpDelete("compentencies/{id}")]
+        public async Task<IActionResult> RemoveCompetenciesRel([Required]int id)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            return Ok(await _applicantsRepository.RemoveApplicantCompentenciesRel(id));
+        }
+
+
+        [HttpDelete("trainings/{id}")]
+        public async Task<IActionResult> RemoveTrainingsRel([Required]int id)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            return Ok(await _applicantsRepository.RemoveApplicantTrainingsRel(id));
+        }
+
+        [HttpDelete("laborexperiences/{id}")]
+        public async Task<IActionResult> RemoveLaborExperiencesRel([Required]int id)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            return Ok(await _applicantsRepository.RemoveApplicantTrainingsRel(id));
         }
     }
 }
