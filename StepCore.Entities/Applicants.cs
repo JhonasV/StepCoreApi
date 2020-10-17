@@ -30,5 +30,6 @@ namespace StepCore.Entities
         public virtual ICollection<Compentencies> Compentencies { get; set; }
         public virtual ICollection<Trainings> Trainings { get; set; }
         public virtual ICollection<LaborExperiences> LaborExperiences { get; set; }
+        public virtual JobPositions JobPositions { get; set; }
     }
 }
