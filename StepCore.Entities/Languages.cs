@@ -1,8 +1,5 @@
-﻿using StepCore.Entities.Common;
-using System;
-using System.Collections.Generic;
+﻿using StepCore.Entities.Framework;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace StepCore.Entities
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace StepCore.Entities.Common
+namespace StepCore.Entities.Framework
 {
     public static class Enums
     {
