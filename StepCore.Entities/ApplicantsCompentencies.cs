@@ -11,7 +11,7 @@ namespace StepCore.Entities
         public int ApplicantsId { get; set; }
         [Required]
         public int CompentenciesId { get; set; }
-
+        public bool IsPrincipal { get; set; }
         public virtual Applicants Applicant { get; set; }
         public virtual Compentencies Compentencie { get; set; }
     }

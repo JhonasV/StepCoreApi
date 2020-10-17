@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StepCore.Entities;
 using StepCore.Framework;
@@ -7,6 +8,7 @@ using StepCore.Services.Interfaces;
 
 namespace StepCore.Controllers
 {
+    [Authorize]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class ApplicantsController : ControllerBase

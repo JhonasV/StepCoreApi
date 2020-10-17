@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Scrutor;
 using StepCore.Entities;
+using StepCore.Framework.Security;
 using StepCore.Services.Interfaces;
 using StepCore.Services.Repositories;
 using System;
@@ -30,7 +31,12 @@ namespace StepCore.Framework.Configurations
             services.AddTransient<IGenericRepository<JobPositions>, GenericRepository<JobPositions>>();
             services.AddTransient<IGenericRepository<Applicants>, GenericRepository<Applicants>>();
             services.AddTransient<IGenericRepository<LaborExperiences>, GenericRepository<LaborExperiences>>();
+            services.AddTransient<IGenericRepository<Users>, GenericRepository<Users>>();
+            services.AddTransient<IGenericRepository<UserRoles>, GenericRepository<UserRoles>>();
+            services.AddTransient<IGenericRepository<Roles>, GenericRepository<Roles>>();
             services.AddTransient<IApplicantsRepository, ApplicantsRepository>();
+            services.AddTransient<IUsersRepository, UsersRepository>();
+            services.AddTransient<IJwtAuthenticationManager, JwtAuthenticationManager>();
         }
     }
 }

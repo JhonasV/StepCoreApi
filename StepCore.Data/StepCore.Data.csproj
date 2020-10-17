@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20201017200058_IsPrincipal property added to Applicants Labor Exp, Compentencies and Trainings.cs" />
+    <Compile Remove="Migrations\20201017200058_IsPrincipal property added to Applicants Labor Exp, Compentencies and Trainings.Designer.cs" />
+    <Compile Remove="Migrations\20201017200258_IsPrincipal property added to Applicants Labor Exp, Compentencies and Trainings.cs" />
+    <Compile Remove="Migrations\20201017200258_IsPrincipal property added to Applicants Labor Exp, Compentencies and Trainings.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.7">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
