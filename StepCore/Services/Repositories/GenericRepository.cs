@@ -47,11 +47,11 @@ namespace StepCore.Services.Repositories
            return await _stepCoreContext.SaveChangesAsync() > 0;
         }
 
-        public bool Update(T obj)
+        public T Update(T obj)
         {
             _table.Attach(obj);
             _stepCoreContext.Entry(obj).State = EntityState.Modified;
-            return true;   
+            return obj;   
         }
     }
 }

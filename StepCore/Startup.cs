@@ -13,8 +13,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using StepCore.Entities;
+using StepCore.Framework.Configurations;
 using StepCore.Services.Interfaces;
 using StepCore.Services.Repositories;
 
@@ -32,18 +34,21 @@ namespace StepCore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string connString = Configuration.GetConnectionString("StepCoreSqlServerConnString");
+            var envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").ToUpper();
+            string connString = "";
+            if (envName == Framework.Constants.Environment.DEVELOPMENT)
+            {
+                connString = Configuration.GetConnectionString("StepCoreSqlServerConnString");
+            }
+            else
+            {
+                connString = Environment.GetEnvironmentVariable("CONN_STRING");
+            }
+            
             services.AddDbContext<StepCoreContext>(option => option.UseSqlServer(connString));
 
-            // Dependecies Injection
-            services.AddTransient<IGenericRepository<Compentencies>, GenericRepository<Compentencies>>();
-            services.AddTransient<IGenericRepository<Languages>, GenericRepository<Languages>>();
-            services.AddTransient<IGenericRepository<Trainings>, GenericRepository<Trainings>>();
-            services.AddTransient<IGenericRepository<JobPositions>, GenericRepository<JobPositions>>();
-            services.AddTransient<IGenericRepository<Applicants>, GenericRepository<Applicants>>();
-            services.AddTransient<IGenericRepository<LaborExperiences>, GenericRepository<LaborExperiences>>();
-            services.AddTransient<IApplicantsRepository, ApplicantsRepository>();
-
+            IocConfiguration.Init(Configuration, services);
+            AuthConfiguration.Init(Configuration, services);
             services.AddControllers();
         }
 

@@ -11,7 +11,7 @@ namespace StepCore.Services.Interfaces
         Task<List<T>> GetAsync();
         Task<T> GetByIdAsync(object id);
         Task<bool> RemoveAsync(object id);
-        bool Update(T obj);
+        T Update(T obj);
         Task<bool> SaveAsync();
     }
 }

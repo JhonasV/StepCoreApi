@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using StepCore.Entities;
+using StepCore.Framework;
 using StepCore.Services.Interfaces;
 
 namespace StepCore.Controllers
@@ -43,12 +44,16 @@ namespace StepCore.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
+            var result = new TaskResult<Applicants>();
             if (id != applicants.Id)
-                return NotFound();
+            {
+                result.AddErrorMessage("Los identificadores no coinciden");
+                return Ok(result);
+            }
 
-            _applicantsRepository.Update(applicants);
-            return Ok(await _applicantsRepository.SaveAsync());
+            result.Data = _applicantsRepository.Update(applicants);
+            await _applicantsRepository.SaveAsync();
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]
