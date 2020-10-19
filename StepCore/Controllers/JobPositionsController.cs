@@ -37,7 +37,7 @@ namespace StepCore.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             await _genericRepository.CreateAsync(jobPositions);
-            return Ok(_genericRepository.SaveAsync().Result);
+            return Ok(await _genericRepository.SaveAsync());
         }
 
         [HttpPut("{id}")]

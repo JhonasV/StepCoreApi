@@ -9,6 +9,14 @@
     <Compile Remove="Migrations\20201017200058_IsPrincipal property added to Applicants Labor Exp, Compentencies and Trainings.Designer.cs" />
     <Compile Remove="Migrations\20201017200258_IsPrincipal property added to Applicants Labor Exp, Compentencies and Trainings.cs" />
     <Compile Remove="Migrations\20201017200258_IsPrincipal property added to Applicants Labor Exp, Compentencies and Trainings.Designer.cs" />
+    <Compile Remove="Migrations\20201018190608_test.cs" />
+    <Compile Remove="Migrations\20201018190608_test.Designer.cs" />
+    <Compile Remove="Migrations\20201018190834_remove usersId column to RolesId.cs" />
+    <Compile Remove="Migrations\20201018190834_remove usersId column to RolesId.Designer.cs" />
+    <Compile Remove="Migrations\20201018190933_Remove Users FK on Role Entite.cs" />
+    <Compile Remove="Migrations\20201018190933_Remove Users FK on Role Entite.Designer.cs" />
+    <Compile Remove="Migrations\20201018191156_Remove Users FK on Role Entite.cs" />
+    <Compile Remove="Migrations\20201018191156_Remove Users FK on Role Entite.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

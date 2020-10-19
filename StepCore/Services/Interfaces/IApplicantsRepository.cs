@@ -1,4 +1,5 @@
 ﻿using StepCore.Entities;
+using StepCore.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace StepCore.Services.Interfaces
 {
     public interface IApplicantsRepository : IGenericRepository<Applicants>
     {
-        List<Applicants> GetWithIncludes();
+        TaskResult<List<Applicants>> GetWithIncludes();
         Task<bool> AddTrainingsRel(ApplicantsTrainings applicantsTrainings);
         Task<bool> AddCompentenciesRel(ApplicantsCompentencies applicantsCompentencies);
         Task<bool> AddLaborExperiencesRel(ApplicantsLaborExperiences applicantsLaborExperiences);

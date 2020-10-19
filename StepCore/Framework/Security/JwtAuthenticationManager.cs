@@ -36,11 +36,9 @@ namespace StepCore.Framework.Security
 
         public ClaimsIdentity GetClaimsIdentity(Users user)
         {
-            var roles = string.Join(", ", user.Roles);
             return new ClaimsIdentity(new Claim[] {
                 new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Role, roles)
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
             });
         }
 

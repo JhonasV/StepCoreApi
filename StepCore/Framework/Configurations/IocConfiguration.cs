@@ -5,10 +5,6 @@ using StepCore.Entities;
 using StepCore.Framework.Security;
 using StepCore.Services.Interfaces;
 using StepCore.Services.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace StepCore.Framework.Configurations
 {
@@ -29,11 +25,9 @@ namespace StepCore.Framework.Configurations
             services.AddTransient<IGenericRepository<Languages>, GenericRepository<Languages>>();
             services.AddTransient<IGenericRepository<Trainings>, GenericRepository<Trainings>>();
             services.AddTransient<IGenericRepository<JobPositions>, GenericRepository<JobPositions>>();
-            services.AddTransient<IGenericRepository<Applicants>, GenericRepository<Applicants>>();
             services.AddTransient<IGenericRepository<LaborExperiences>, GenericRepository<LaborExperiences>>();
-            services.AddTransient<IGenericRepository<Users>, GenericRepository<Users>>();
             services.AddTransient<IGenericRepository<UserRoles>, GenericRepository<UserRoles>>();
-            services.AddTransient<IGenericRepository<Roles>, GenericRepository<Roles>>();
+            services.AddTransient<IRolesRepository, RolesRepository>();
             services.AddTransient<IApplicantsRepository, ApplicantsRepository>();
             services.AddTransient<IUsersRepository, UsersRepository>();
             services.AddTransient<IJwtAuthenticationManager, JwtAuthenticationManager>();

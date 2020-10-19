@@ -20,9 +20,25 @@ namespace StepCore.Services.Repositories
            _stepCoreContext = stepCoreContext;
         }
 
+        public async Task<bool> AddUserRole(int roleId, int userId)
+        {
+            await _stepCoreContext.UserRoles.AddAsync(new UserRoles { RolesId = roleId, UsersId = userId });
+            return await _stepCoreContext.SaveChangesAsync() > 0;
+        }
+
         public async Task<Users> GetByUserNameAsync(string userName)
         {
-            return await _stepCoreContext.Users.FirstOrDefaultAsync(e => e.UserName == userName);
+            var user = await _stepCoreContext.Users.FirstOrDefaultAsync(e => e.UserName == userName);
+            if(user != null)
+                user.Roles = await this.GetUserRolesAsync(user.Id);
+            return user;
+        }
+
+        public async Task<List<Roles>> GetUserRolesAsync(int userId)
+        {
+            return await _stepCoreContext.UserRoles.Where(e => e.UsersId == userId)
+                 .Include(e => e.Role)
+                 .Select(e => e.Role).ToListAsync();
         }
     }
 }

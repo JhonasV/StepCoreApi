@@ -53,7 +53,7 @@ namespace StepCore.Controllers
                 return Ok(result);
             }
 
-            result.Data = _applicantsRepository.Update(applicants);
+            result = _applicantsRepository.Update(applicants);
             await _applicantsRepository.SaveAsync();
             return Ok(result);
         }

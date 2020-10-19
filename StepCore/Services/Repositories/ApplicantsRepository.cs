@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using StepCore.Entities;
+using StepCore.Framework;
 using StepCore.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,9 +39,10 @@ namespace StepCore.Services.Repositories
             return await _stepCoreContext.SaveChangesAsync() > 0;
         }
 
-        public List<Applicants> GetWithIncludes()
+        public TaskResult<List<Applicants>> GetWithIncludes()
         {
             _logger.LogInformation("Retrieve Applicants information with related entities objects");
+            var result = new TaskResult<List<Applicants>>();
             var applicants = _stepCoreContext
                 .Applicants
                 .ToList();
@@ -52,7 +54,9 @@ namespace StepCore.Services.Repositories
                 appl.Trainings = this.GetApplicantTrainings(appl.Id);
             });
 
-            return applicants;
+            result.Data = applicants;
+
+            return result;
         }
 
         public List<Compentencies> GetApplicantCompentencies(int applicantId)

@@ -9,5 +9,8 @@ namespace StepCore.Services.Interfaces
     public interface IUsersRepository : IGenericRepository<Users>
     {
         Task<Users> GetByUserNameAsync(string userName);
+        Task<bool> AddUserRole(int roleId, int userId);
+
+        Task<List<Roles>> GetUserRolesAsync(int userId);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using StepCore.Framework;
 using StepCore.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -25,20 +26,22 @@ namespace StepCore.Services.Repositories
             return obj;
         }
 
-        public async Task<List<T>> GetAsync()
+        public async Task<TaskResult<List<T>>> GetAsync()
         {
-            return await _table.ToListAsync();
+            var result = new TaskResult<List<T>>();
+            result.Data = await _table.ToListAsync();
+            return result;
         }
 
-        public async Task<T> GetByIdAsync(object id)
+        public async Task<TaskResult<T>> GetByIdAsync(object id)
         {
-            return await _table.FindAsync(id);
+            return new TaskResult<T> {Data = await _table.FindAsync(id) };
         }
 
         public async Task<bool> RemoveAsync(object id)
         {
-            T existing = await this.GetByIdAsync(id);
-            _table.Remove(existing);
+            var existing = await this.GetByIdAsync(id);
+            _table.Remove(existing.Data);
             return true;
         }
 
@@ -47,11 +50,13 @@ namespace StepCore.Services.Repositories
            return await _stepCoreContext.SaveChangesAsync() > 0;
         }
 
-        public T Update(T obj)
+        public TaskResult<T> Update(T obj)
         {
             _table.Attach(obj);
             _stepCoreContext.Entry(obj).State = EntityState.Modified;
-            return obj;   
+            return new TaskResult<T> { Data = obj};   
         }
+
+       
     }
 }
