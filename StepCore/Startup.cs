@@ -34,17 +34,10 @@ namespace StepCore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").ToUpper();
-            string connString = "";
-            if (envName == Framework.Constants.Environment.DEVELOPMENT)
-            {
-                connString = Configuration.GetConnectionString("StepCoreSqlServerConnString");
-            }
-            else
-            {
-                connString = Environment.GetEnvironmentVariable("CONN_STRING");
-            }
-            
+            var envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? Framework.Constants.Environment.PRODUCTION;
+            string connStringName = envName.ToUpper() == Framework.Constants.Environment.DEVELOPMENT ? "StepCoreSqlServerConnString" : "SmarterASPDB";
+
+            var connString = Configuration.GetConnectionString(connStringName);
             services.AddDbContext<StepCoreContext>(option => option.UseSqlServer(connString));
 
             IocConfiguration.Init(Configuration, services);
