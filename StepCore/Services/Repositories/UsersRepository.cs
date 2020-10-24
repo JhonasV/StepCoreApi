@@ -1,11 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using StepCore.Entities;
+using StepCore.Framework;
 using StepCore.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Roles = StepCore.Entities.Roles;
 
 namespace StepCore.Services.Repositories
 {
@@ -22,17 +24,23 @@ namespace StepCore.Services.Repositories
 
         public async Task<bool> AddUserRole(int roleId, int userId)
         {
+        
             await _stepCoreContext.UserRoles.AddAsync(new UserRoles { RolesId = roleId, UsersId = userId });
             return await _stepCoreContext.SaveChangesAsync() > 0;
         }
 
+
+
         public async Task<Users> GetByUserNameAsync(string userName)
         {
+
             var user = await _stepCoreContext.Users.FirstOrDefaultAsync(e => e.UserName == userName);
             if(user != null)
                 user.Roles = await this.GetUserRolesAsync(user.Id);
             return user;
         }
+
+ 
 
         public async Task<List<Roles>> GetUserRolesAsync(int userId)
         {
@@ -40,5 +48,6 @@ namespace StepCore.Services.Repositories
                  .Include(e => e.Role)
                  .Select(e => e.Role).ToListAsync();
         }
+
     }
 }

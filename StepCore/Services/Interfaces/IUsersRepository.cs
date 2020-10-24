@@ -1,8 +1,10 @@
 ﻿using StepCore.Entities;
+using StepCore.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Roles = StepCore.Entities.Roles;
 
 namespace StepCore.Services.Interfaces
 {
@@ -10,7 +12,7 @@ namespace StepCore.Services.Interfaces
     {
         Task<Users> GetByUserNameAsync(string userName);
         Task<bool> AddUserRole(int roleId, int userId);
-
         Task<List<Roles>> GetUserRolesAsync(int userId);
+
     }
 }
