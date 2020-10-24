@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using StepCore.Entities;
 using StepCore.Framework;
 using StepCore.Framework.Extensions;
+using StepCore.Framework.Models;
 using StepCore.Framework.Security;
 using StepCore.Services.Interfaces;
+using static StepCore.Framework.Constants;
 
 namespace StepCore.Controllers
 {
@@ -34,6 +37,12 @@ namespace StepCore.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(Users user)
         {
+
+            if (!ModelState.IsValid)
+            {   
+                return BadRequest(new BadRequestObjectResult(ModelState));
+            }
+
             var usr = await _usersRepository.GetByUserNameAsync(user.UserName);
             var result = new TaskResult<string>();
 
@@ -47,7 +56,7 @@ namespace StepCore.Controllers
             }
 
             result.AddErrorMessage("Usuario y/o password inválido");
-            return BadRequest(result);
+            return Unauthorized(result);
         }
         [AllowAnonymous]
         [HttpPost("register")]
@@ -61,9 +70,29 @@ namespace StepCore.Controllers
 
             if(usr == null)
             {
+
+                var roleResult = await _rolesRepository.GetByNameAsync(RolesConstants.APPLICANT);
+                if (!roleResult.Success)
+                {
+                    roleResult.AddErrorMessage($"El role {RolesConstants.APPLICANT} no existe");
+                    return BadRequest(roleResult);
+                }
+
                 await _usersRepository.CreateAsync(user);
-                await _usersRepository.SaveAsync();
-                await _usersRepository.AddUserRole((int)Framework.Roles.APPLICANT, user.Id);
+                var createdSuccesfully = await _usersRepository.SaveAsync();
+                if (!createdSuccesfully)
+                {
+                    result.AddErrorMessage($"No se pudo crear el usuario: {user.UserName}");
+                    return BadRequest(result);
+                }
+   
+                var roleAdded = await _usersRepository.AddUserRole(roleResult.Data.Id, user.Id);
+                if (!roleAdded)
+                {
+                    result.AddErrorMessage($"No se pudo agregar el rol {roleResult.Data.Name} al usuario {user.UserName}");
+                    return BadRequest(result);
+                }
+
                 result.Data = _jwtAuthenticationManager.Authenticate(user);
                 return Ok(result);
             }
@@ -74,25 +103,32 @@ namespace StepCore.Controllers
 
         [Authorize]
         [HttpPost("user/role")]
-        public async Task<IActionResult> AddUserRole(UserRoles userRoles)
+        public async Task<IActionResult> AddUserRole(AddUserRoleModel model)
         {
             var result = new TaskResult<string>();
 
-            var user = await _usersRepository.GetByIdAsync(userRoles.UsersId);
-            if(user == null)
+            var userResult = await _usersRepository.GetByIdAsync(model.UserId);
+            if(userResult.Data == null)
             {
-                result.AddErrorMessage("El usuario no existe");
-                return BadRequest(result);
+                userResult.AddErrorMessage("El usuario no existe");
+                return BadRequest(userResult);
             }
 
-            var role = await _rolesRepository.GetByIdAsync(userRoles.RolesId);
-            if (role == null)
+            var roleResult = await _rolesRepository.GetByNameAsync(model.RoleName);
+            if (roleResult.Data == null)
             {
-                result.AddErrorMessage("El role no existe");
-                return BadRequest(result);
+                roleResult.AddErrorMessage("El role no existe");
+                return BadRequest(roleResult);
             }
 
-            await _usersRepository.AddUserRole(userRoles.RolesId, userRoles.UsersId);
+            var added = await _usersRepository.AddUserRole(roleResult.Data.Id, userResult.Data.Id);
+            if (!added)
+            {
+                result.AddErrorMessage($"Error al agregar el rol {model.RoleName} al usuario {userResult.Data.UserName}");
+                return Ok(result);
+            }
+
+            result.AddMessage($"Se agregó exitosamente el rol {model.RoleName} al usuario {userResult.Data.UserName}");
             return Ok(result);
         }
 
@@ -101,7 +137,16 @@ namespace StepCore.Controllers
         {
             var currentUser =  this.CurrentUser();
             currentUser.Roles = await _usersRepository.GetUserRolesAsync(currentUser.Id);
-            return Ok(currentUser);
+            var result = new TaskResult<Users>();
+            result.Data = currentUser;
+            return Ok(result);
         }
+
+        //[HttpGet("users")]
+        //public async Task<IActionResult> Get()
+        //{
+        //    var result = await _usersRepository.GetWithRolesAsync();
+        //    return Ok(result);
+        //}
     }
 }
