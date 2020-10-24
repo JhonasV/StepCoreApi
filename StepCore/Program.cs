@@ -21,6 +21,10 @@ namespace StepCore
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                });
+                }).ConfigureAppConfiguration((builderContext, config) =>
+                {
+                    config.AddJsonFile($"appsettings.Production.json", optional: false, reloadOnChange: true);
+
+                });           
     }
 }
