@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+	<AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
+	<AspNetCoreModuleName>AspNetCoreModule</AspNetCoreModuleName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\StepCore.Data\StepCore.Data.csproj" />
+    <ProjectReference Include="..\StepCore.Tests\StepCore.Test.csproj" />
   </ItemGroup>
 
   <ItemGroup>
