@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using StepCore.Entities;
+using StepCore.Framework;
 using StepCore.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,15 @@ namespace StepCore.Services.Repositories
             return await _stepCoreContext
                 .UserRoles
                 .Where(e => e.UsersId == userId && e.RolesId == rol.Id).AnyAsync();
+        }
+
+        public async Task<TaskResult<Roles>> GetByNameAsync(string roleName)
+        {
+            return new TaskResult<Roles>
+            {
+                Data = await _stepCoreContext.Roles.FirstOrDefaultAsync(e => e.Name.ToLower() == roleName.ToLower())
+            };
+
         }
     }
 }
