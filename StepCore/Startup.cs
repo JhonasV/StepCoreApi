@@ -43,6 +43,10 @@ namespace StepCore
             IocConfiguration.Init(Configuration, services);
             AuthConfiguration.Init(Configuration, services);
             services.AddControllers();
+            services.AddCors( opt =>
+            {
+                opt.AddPolicy("AllowMyOrigin", builder => builder.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,7 +70,7 @@ namespace StepCore
 
             app.UseAuthentication();
             app.UseAuthorization();
-
+            app.UseCors("AllowMyOrigin");
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
