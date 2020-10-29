@@ -34,8 +34,8 @@ namespace StepCore.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
-            return Ok(await _genericRepository.CreateAsync(languages));
+            await _genericRepository.CreateAsync(languages);
+            return Ok(await _genericRepository.SaveAsync());
         }
         [HttpPut("{id}")]
         public async Task<IActionResult> Update([Required] int id, Languages languages)
