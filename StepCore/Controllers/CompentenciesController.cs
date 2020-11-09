@@ -21,23 +21,23 @@ namespace StepCore.Controllers
     [ApiController]
     public class CompentenciesController : ControllerBase
     {
-        private readonly IGenericRepository<Compentencies> _genericRepository;
+        private readonly ICompentenciesRepository _compentenciesRepository;
 
-        public CompentenciesController(IGenericRepository<Compentencies> genericRepository)
+        public CompentenciesController(ICompentenciesRepository compentenciesRepository)
         {
-            _genericRepository = genericRepository;
+            _compentenciesRepository = compentenciesRepository;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            return Ok(await _genericRepository.GetAsync());
+            return Ok(await _compentenciesRepository.GetAsync());
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            return Ok(await _genericRepository.GetByIdAsync(id));
+            return Ok(await _compentenciesRepository.GetByIdAsync(id));
         }
 
         [HttpPost]
@@ -45,8 +45,8 @@ namespace StepCore.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            await _genericRepository.CreateAsync(skills);
-            return Ok(await _genericRepository.SaveAsync());
+            await _compentenciesRepository.CreateAsync(skills);
+            return Ok(await _compentenciesRepository.SaveAsync());
         }
 
         [HttpPut("{id}")]
@@ -55,8 +55,8 @@ namespace StepCore.Controllers
             if(!ModelState.IsValid || id != compentencies.Id)
                  return BadRequest(ModelState);
 
-             _genericRepository.Update(compentencies);
-            return Ok(await _genericRepository.SaveAsync());
+            _compentenciesRepository.Update(compentencies);
+            return Ok(await _compentenciesRepository.SaveAsync());
         }
 
         [HttpDelete("{id}")]
@@ -66,8 +66,9 @@ namespace StepCore.Controllers
                 return BadRequest(ModelState);
 
 
-            await _genericRepository.RemoveAsync(id);
-            return Ok(await _genericRepository.SaveAsync());
+            await _compentenciesRepository.RemoveAsync(id);
+            return Ok(await _compentenciesRepository.SaveAsync());
         }
+
     }
 }

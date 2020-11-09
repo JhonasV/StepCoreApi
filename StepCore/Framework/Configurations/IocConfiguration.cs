@@ -21,7 +21,7 @@ namespace StepCore.Framework.Configurations
             .WithScopedLifetime());
 
             // Dependecies Injection
-            services.AddTransient<IGenericRepository<Compentencies>, GenericRepository<Compentencies>>();
+            services.AddTransient<ICompentenciesRepository, CompentenciesRespository>();
             services.AddTransient<IGenericRepository<Languages>, GenericRepository<Languages>>();
             services.AddTransient<IGenericRepository<Trainings>, GenericRepository<Trainings>>();
             services.AddTransient<IGenericRepository<JobPositions>, GenericRepository<JobPositions>>();
