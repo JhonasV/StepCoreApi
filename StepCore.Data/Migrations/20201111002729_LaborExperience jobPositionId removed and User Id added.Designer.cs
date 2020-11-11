@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StepCore;
 
 namespace StepCore.Data.Migrations
 {
     [DbContext(typeof(StepCoreContext))]
-    partial class StepCoreContextModelSnapshot : ModelSnapshot
+    [Migration("20201111002729_LaborExperience jobPositionId removed and User Id added")]
+    partial class LaborExperiencejobPositionIdremovedandUserIdadded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -294,11 +296,6 @@ namespace StepCore.Data.Migrations
 
                     b.Property<DateTime>("InitialDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Position")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
 
                     b.Property<double>("Salary")
                         .HasColumnType("float");

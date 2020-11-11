@@ -22,9 +22,5 @@
     <ProjectReference Include="..\StepCore.Tests\StepCore.Test.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ViewModels\Compentencies\" />
-  </ItemGroup>
-
 
 </Project>

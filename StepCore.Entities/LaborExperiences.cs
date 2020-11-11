@@ -9,14 +9,16 @@ namespace StepCore.Entities
     {
         [Required, StringLength(50)]
         public string Company { get; set; }
+        [Required, StringLength(50)]
+        public string Position { get;  set; }
         [Required]
-        public int JobPositionsId { get; set; }
+        public int UserId { get; set; }
         [Required]
         public DateTime InitialDate { get; set; }
         [Required]
         public DateTime EndDate { get; set; }
         [Required]
         public double Salary { get; set; }
-        public virtual JobPositions JobPositions { get; set; }
+        public virtual Users Users { get; set; }
     }
 }

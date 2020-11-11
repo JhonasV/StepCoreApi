@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StepCore.Entities;
+using StepCore.Framework.Extensions;
 using StepCore.Services.Interfaces;
 
 namespace StepCore.Controllers
@@ -34,6 +35,7 @@ namespace StepCore.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(LaborExperiences LaborExperiences)
         {
+            LaborExperiences.UserId = this.CurrentUser().Id;
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             await _genericRepository.CreateAsync(LaborExperiences);
