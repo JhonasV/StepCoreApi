@@ -13,33 +13,32 @@ namespace StepCore.Controllers
     [ApiController]
     public class LaborExperiencesController : ControllerBase
     {
-        private readonly IGenericRepository<LaborExperiences> _genericRepository;
+        private readonly ILaborExperiencesRepository _laborExperiencescRepository;
 
-        public LaborExperiencesController(IGenericRepository<LaborExperiences> genericRepository)
+        public LaborExperiencesController(ILaborExperiencesRepository laborExperiencescRepository)
         {
-            _genericRepository = genericRepository;
+            _laborExperiencescRepository = laborExperiencescRepository;   
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            return Ok(await _genericRepository.GetAsync());
+            return Ok(await _laborExperiencescRepository.GetAsync());
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            return Ok(await _genericRepository.GetByIdAsync(id));
+            return Ok(await _laborExperiencescRepository.GetByIdAsync(id));
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(LaborExperiences LaborExperiences)
         {
-            LaborExperiences.UserId = this.CurrentUser().Id;
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            await _genericRepository.CreateAsync(LaborExperiences);
-            return Ok(await _genericRepository.SaveAsync());
+            await _laborExperiencescRepository.CreateAsync(LaborExperiences);
+            return Ok(await _laborExperiencescRepository.SaveAsync());
         }
 
         [HttpPut("{id}")]
@@ -51,8 +50,8 @@ namespace StepCore.Controllers
             if (id != laborExperiences.Id)
                 return NotFound();
 
-             _genericRepository.Update(laborExperiences);
-            return Ok(await _genericRepository.SaveAsync());
+            _laborExperiencescRepository.Update(laborExperiences);
+            return Ok(await _laborExperiencescRepository.SaveAsync());
         }
 
         [HttpDelete("{id}")]
@@ -61,8 +60,16 @@ namespace StepCore.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            await _genericRepository.RemoveAsync(id);
-            return Ok(await _genericRepository.SaveAsync());
+            await _laborExperiencescRepository.RemoveAsync(id);
+            return Ok(await _laborExperiencescRepository.SaveAsync());
+        }
+
+        [HttpGet("GetListByUserId/{userId}")]
+        public async Task<IActionResult> GetListByUserId(int userId)
+        {
+            var result = await _laborExperiencescRepository.GetListByUserId(userId);
+
+            return Ok(result);
         }
     }
 }

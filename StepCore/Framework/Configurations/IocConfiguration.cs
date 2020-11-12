@@ -25,7 +25,7 @@ namespace StepCore.Framework.Configurations
             services.AddTransient<IGenericRepository<Languages>, GenericRepository<Languages>>();
             services.AddTransient<IGenericRepository<Trainings>, GenericRepository<Trainings>>();
             services.AddTransient<IGenericRepository<JobPositions>, GenericRepository<JobPositions>>();
-            services.AddTransient<IGenericRepository<LaborExperiences>, GenericRepository<LaborExperiences>>();
+            services.AddTransient<ILaborExperiencesRepository,LaborExperiencesRepository>();
             services.AddTransient<IGenericRepository<UserRoles>, GenericRepository<UserRoles>>();
             services.AddTransient<IRolesRepository, RolesRepository>();
             services.AddTransient<IApplicantsRepository, ApplicantsRepository>();

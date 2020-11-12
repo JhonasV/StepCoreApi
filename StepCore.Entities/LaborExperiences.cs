@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace StepCore.Entities
@@ -12,6 +13,7 @@ namespace StepCore.Entities
         [Required, StringLength(50)]
         public string Position { get;  set; }
         [Required]
+        [ForeignKey("Users")]
         public int UserId { get; set; }
         [Required]
         public DateTime InitialDate { get; set; }
