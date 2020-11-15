@@ -25,8 +25,10 @@ namespace StepCore.Entities
         public string Department { get; set; }
         [Required]
         public double SalaryAspiration { get; set; }
-        [Required, StringLength(50)]
+        [StringLength(50)]
         public string RecommendedBy { get; set; }
+        [Required, ForeignKey("Users")]
+        public int UsersId { get; set; }
         public virtual ICollection<Compentencies> Compentencies { get; set; }
         public virtual ICollection<Trainings> Trainings { get; set; }
         public virtual ICollection<LaborExperiences> LaborExperiences { get; set; }
