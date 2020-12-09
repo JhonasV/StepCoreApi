@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Z.EntityFramework.Plus;
+using static StepCore.Framework.Constants;
 
 namespace StepCore.Services.Repositories
 {
@@ -14,38 +15,77 @@ namespace StepCore.Services.Repositories
     {
         private readonly ILogger<GenericRepository<Applicants>> _logger;
         private readonly StepCoreContext _stepCoreContext;
+        private readonly IRolesRepository _rolesRepository;
 
-        public ApplicantsRepository(ILogger<GenericRepository<Applicants>> logger, StepCoreContext stepCoreContext) : base(logger, stepCoreContext)
+        public ApplicantsRepository(ILogger<GenericRepository<Applicants>> logger, StepCoreContext stepCoreContext, IRolesRepository rolesRepository) : base(logger, stepCoreContext)
         {
             _logger = logger;
             _stepCoreContext = stepCoreContext;
+            _rolesRepository = rolesRepository;
         }
 
-        public async Task<bool> AddCompentenciesRel(ApplicantsCompentencies applicantsCompentencies)
+        public async Task<TaskResult<bool>> AddCompentenciesRel(List<ApplicantsCompentencies> applicantsCompentencies)
         {
-            await _stepCoreContext.ApplicantsCompentencies.AddAsync(applicantsCompentencies);
-            return await _stepCoreContext.SaveChangesAsync() > 0;
+            var result = new TaskResult<bool>();
+            try
+            {
+                await _stepCoreContext.ApplicantsCompentencies.AddRangeAsync(applicantsCompentencies);
+                result.Data = await _stepCoreContext.SaveChangesAsync() > 0;
+            }
+            catch (System.Exception e)
+            {
+                result.AddErrorMessage("Error adding ApplicantsCompentencies: " + e.InnerException.Message);
+            }
+
+            return result;          
         }
 
-        public async Task<bool> AddLaborExperiencesRel(ApplicantsLaborExperiences applicantsLaborExperiences)
+        public async Task<TaskResult<bool>> AddLaborExperiencesRel(List<ApplicantsLaborExperiences> applicantsLaborExperiences)
         {
-            await _stepCoreContext.ApplicantsLaborExperiences.AddAsync(applicantsLaborExperiences);
-            return await _stepCoreContext.SaveChangesAsync() > 0;
+            var result = new TaskResult<bool>();
+            try
+            {
+                await _stepCoreContext.ApplicantsLaborExperiences.AddRangeAsync(applicantsLaborExperiences);
+                result.Data = await _stepCoreContext.SaveChangesAsync() > 0;
+            }
+            catch (System.Exception e)
+            {
+                result.AddErrorMessage("Error adding ApplicantsLaborExperiences: " + e.InnerException.Message);
+            }
+
+            return result;
         }
 
-        public async Task<bool> AddTrainingsRel(ApplicantsTrainings applicantsTrainings)
+        public async Task<TaskResult<bool>> AddTrainingsRel(List<ApplicantsTrainings> applicantsTrainings)
         {
-            await _stepCoreContext.ApplicantsTrainings.AddAsync(applicantsTrainings);
-            return await _stepCoreContext.SaveChangesAsync() > 0;
+            var result = new TaskResult<bool>();
+            try
+            {
+                await _stepCoreContext.ApplicantsTrainings.AddRangeAsync(applicantsTrainings);
+                result.Data = await _stepCoreContext.SaveChangesAsync() > 0;
+            }
+            catch (System.Exception e)
+            {
+                result.AddErrorMessage("Error adding ApplicantsTrainings: " + e.InnerException.Message);
+            }
+
+            return result;
         }
 
-        public TaskResult<List<Applicants>> GetWithIncludes()
+        public async Task<TaskResult<List<Applicants>>> GetWithIncludes(Users currentUser)
         {
             _logger.LogInformation("Retrieve Applicants information with related entities objects");
             var result = new TaskResult<List<Applicants>>();
+            var isAdmin = await _rolesRepository.IsInRole(RolesConstants.ADMIN, currentUser.Id);
+
+
             var applicants = _stepCoreContext
                 .Applicants
+                .Where(e => e.UsersId == currentUser.Id || isAdmin)
                 .ToList();
+
+
+
 
             applicants.ForEach((Applicants appl) =>
             {
@@ -108,6 +148,23 @@ namespace StepCore.Services.Repositories
         {
             return await _stepCoreContext.ApplicantsLaborExperiences
             .DeleteFromQueryAsync(e => new ApplicantsLaborExperiences { Id = laborExperiencesId}) > 0;
+        }
+
+        public async Task<TaskResult<int>> CreateAsync(Applicants applicants)
+        {
+            var result = new TaskResult<int>();
+            try
+            {
+                await _stepCoreContext.AddAsync(applicants);
+                await _stepCoreContext.SaveChangesAsync();
+                result.Data = applicants.Id;
+            }
+            catch (System.Exception e)
+            {
+                result.AddErrorMessage("Error adding applicant: "+ e.InnerException.Message);
+            }
+
+            return result;
         }
     }
 }

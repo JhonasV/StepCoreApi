@@ -9,6 +9,7 @@ namespace StepCore.Services.Interfaces
 {
     public interface ILaborExperiencesRepository : IGenericRepository<LaborExperiences>
     {
+        Task<TaskResult<List<LaborExperiences>>> GetAsync(Users currentUser);
         Task<TaskResult<List<LaborExperiences>>> GetListByUserId(int userId);
     }
 }

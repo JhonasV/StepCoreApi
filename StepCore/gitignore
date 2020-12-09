@@ -395,4 +395,3 @@ thumb
 sketch
 
 # End of https://www.toptal.com/developers/gitignore/api/aspnetcore,react,node
-/StepCore/appsettings.Production.json

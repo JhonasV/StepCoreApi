@@ -7,16 +7,31 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static StepCore.Framework.Constants;
 
 namespace StepCore.Services.Repositories
 {
     public class LaborExperiencesRepository : GenericRepository<LaborExperiences>, ILaborExperiencesRepository
     {
         private readonly StepCoreContext _stepCoreContext;
+        private readonly IRolesRepository _rolesRepository;
 
-        public LaborExperiencesRepository(ILogger<GenericRepository<LaborExperiences>> logger, StepCoreContext stepCoreContext) : base(logger, stepCoreContext)
+        public LaborExperiencesRepository(ILogger<GenericRepository<LaborExperiences>> logger, StepCoreContext stepCoreContext, IRolesRepository rolesRepository) : base(logger, stepCoreContext)
         {
             _stepCoreContext = stepCoreContext;
+            _rolesRepository = rolesRepository;
+        }
+
+        public async Task<TaskResult<List<LaborExperiences>>> GetAsync(Users currentUser)
+        {
+            var result = new TaskResult<List<LaborExperiences>>();
+            var isAdmin = await _rolesRepository.IsInRole(RolesConstants.ADMIN, currentUser.Id);
+            result.Data = await _stepCoreContext
+                .LaborExperiences
+                .Where(e => e.UserId == currentUser.Id || isAdmin)
+                .ToListAsync();
+
+            return result;
         }
 
         public async Task<TaskResult<List<LaborExperiences>>> GetListByUserId(int userId)

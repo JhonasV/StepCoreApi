@@ -1,9 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StepCore.Entities;
 using StepCore.Framework;
+using StepCore.Framework.Extensions;
+using StepCore.Framework.Models.Applicants;
 using StepCore.Services.Interfaces;
 
 namespace StepCore.Controllers
@@ -14,16 +18,21 @@ namespace StepCore.Controllers
     public class ApplicantsController : ControllerBase
     {
         private readonly IApplicantsRepository _applicantsRepository;
+        private readonly IUsersRepository _usersRepository;
 
-        public ApplicantsController(IApplicantsRepository applicantsRepository)
+        public ApplicantsController(IApplicantsRepository applicantsRepository, IUsersRepository usersRepository)
         {
             _applicantsRepository = applicantsRepository;
+            _usersRepository = usersRepository;
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            return Ok( _applicantsRepository.GetWithIncludes());
+            var currentUser = this.CurrentUser();
+            currentUser.Roles = await _usersRepository.GetUserRolesAsync(currentUser.Id);
+            var result = await _applicantsRepository.GetWithIncludes(currentUser);
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
@@ -33,12 +42,44 @@ namespace StepCore.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Applicants applicants)
+        public async Task<IActionResult> Create(ApplicantsCreateModel model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            await _applicantsRepository.CreateAsync(applicants);
-            return Ok(await _applicantsRepository.SaveAsync());
+
+            var currentUser = this.CurrentUser();
+            model.Applicants.UsersId = currentUser.Id;
+            var result  = await _applicantsRepository.CreateAsync(model.Applicants);
+
+            if (!result.Success)
+            {
+                return Ok(result);
+            }
+            model.ApplicantsTrainings = model.ApplicantsTrainings.Select((item) => new ApplicantsTrainings { ApplicantsId = result.Data, TrainingsId = item.TrainingsId }).ToList();
+            var appTrainResult = await _applicantsRepository.AddTrainingsRel(model.ApplicantsTrainings);
+
+            if (!appTrainResult.Success)
+            {
+                return Ok(appTrainResult);
+            }
+
+            model.ApplicantsCompentencies = model.ApplicantsCompentencies.Select((item) => new ApplicantsCompentencies { ApplicantsId = result.Data, CompentenciesId = item.CompentenciesId }).ToList();
+            var appCompResult = await _applicantsRepository.AddCompentenciesRel(model.ApplicantsCompentencies);
+
+            if (!appCompResult.Success)
+            {
+                return Ok(appCompResult);
+            }
+
+            model.ApplicantsLaborExperiences = model.ApplicantsLaborExperiences.Select((item) => new ApplicantsLaborExperiences { ApplicantsId = result.Data, LaborExperiencesId = item.LaborExperiencesId }).ToList();
+            var appLabExpResult = await _applicantsRepository.AddLaborExperiencesRel(model.ApplicantsLaborExperiences);
+
+            if (!appLabExpResult.Success)
+            {
+                return Ok(appLabExpResult);
+            }
+
+            return Ok(result);
         }
 
         [HttpPut("{id}")]
@@ -69,7 +110,7 @@ namespace StepCore.Controllers
         }
 
         [HttpPost("compentencies")]
-        public async Task<IActionResult> AddCompetenciesRel(ApplicantsCompentencies applicantsCompentencies)
+        public async Task<IActionResult> AddCompetenciesRel(List<ApplicantsCompentencies> applicantsCompentencies)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -79,7 +120,7 @@ namespace StepCore.Controllers
 
 
         [HttpPost("trainings")]
-        public async Task<IActionResult> AddTrainingsRel(ApplicantsTrainings applicantsTrainings)
+        public async Task<IActionResult> AddTrainingsRel(List<ApplicantsTrainings> applicantsTrainings)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -88,7 +129,7 @@ namespace StepCore.Controllers
         }
 
         [HttpPost("laborexperiences")]
-        public async Task<IActionResult> AddLaborExperiencesRel(ApplicantsLaborExperiences applicantsLaborExperiences)
+        public async Task<IActionResult> AddLaborExperiencesRel(List<ApplicantsLaborExperiences> applicantsLaborExperiences)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

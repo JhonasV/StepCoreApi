@@ -14,16 +14,21 @@ namespace StepCore.Controllers
     public class LaborExperiencesController : ControllerBase
     {
         private readonly ILaborExperiencesRepository _laborExperiencescRepository;
+        private readonly IUsersRepository _usersRepository;
 
-        public LaborExperiencesController(ILaborExperiencesRepository laborExperiencescRepository)
+        public LaborExperiencesController(ILaborExperiencesRepository laborExperiencescRepository, IUsersRepository usersRepository)
         {
-            _laborExperiencescRepository = laborExperiencescRepository;   
+            _laborExperiencescRepository = laborExperiencescRepository;
+            _usersRepository = usersRepository;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            return Ok(await _laborExperiencescRepository.GetAsync());
+            var currentUser = this.CurrentUser();
+            currentUser.Roles = await _usersRepository.GetUserRolesAsync(currentUser.Id);
+            var result = await _laborExperiencescRepository.GetAsync(currentUser);
+            return Ok(result);
         }
 
         [HttpGet("{id}")]

@@ -9,10 +9,11 @@ namespace StepCore.Services.Interfaces
 {
     public interface IApplicantsRepository : IGenericRepository<Applicants>
     {
-        TaskResult<List<Applicants>> GetWithIncludes();
-        Task<bool> AddTrainingsRel(ApplicantsTrainings applicantsTrainings);
-        Task<bool> AddCompentenciesRel(ApplicantsCompentencies applicantsCompentencies);
-        Task<bool> AddLaborExperiencesRel(ApplicantsLaborExperiences applicantsLaborExperiences);
+        Task<TaskResult<int>> CreateAsync(Applicants applicants);
+        Task<TaskResult<List<Applicants>>> GetWithIncludes(Users currentUser);
+        Task<TaskResult<bool>> AddTrainingsRel(List<ApplicantsTrainings> applicantsTrainings);
+        Task<TaskResult<bool>> AddCompentenciesRel(List<ApplicantsCompentencies> applicantsCompentencies);
+        Task<TaskResult<bool>> AddLaborExperiencesRel(List<ApplicantsLaborExperiences> applicantsLaborExperiences);
         List<Trainings> GetApplicantTrainings(int applicantId);
         List<Compentencies> GetApplicantCompentencies(int applicantId);
         List<LaborExperiences> GetApplicantLaborExperiences(int applicantId);
