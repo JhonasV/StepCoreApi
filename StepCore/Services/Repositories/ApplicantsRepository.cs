@@ -80,6 +80,7 @@ namespace StepCore.Services.Repositories
         {
             _logger.LogInformation("Retrieve Applicants information with related entities objects");
             var result = new TaskResult<List<Applicants>>();
+            result.Data = new List<Applicants>();
             var isAdmin = await _rolesRepository.IsInRole(RolesConstants.ADMIN, currentUser.Id);
 
             var applicants = _stepCoreContext
