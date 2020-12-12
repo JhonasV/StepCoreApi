@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StepCore.Entities.Framework;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -29,8 +30,11 @@ namespace StepCore.Entities
         public string RecommendedBy { get; set; }
         [Required, ForeignKey("Users")]
         public int UsersId { get; set; }
+        public int Status { get; set; } = (int)Enums.Entities.Status.ENABLE;
         public virtual ICollection<Compentencies> Compentencies { get; set; }
         public virtual ICollection<Trainings> Trainings { get; set; }
         public virtual ICollection<LaborExperiences> LaborExperiences { get; set; }
+        [NotMapped]
+        public virtual JobPositions JobPositions { get; set; }
     }
 }

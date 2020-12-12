@@ -1,8 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StepCore.Entities;
+using StepCore.Entities.Framework;
+using StepCore.Framework;
 using StepCore.Services.Interfaces;
 
 namespace StepCore.Controllers
@@ -13,10 +16,12 @@ namespace StepCore.Controllers
     public class EmployeesController : ControllerBase
     {
         private readonly IGenericRepository<Employees> _genericRepository;
+        private readonly IApplicantsRepository _applicantsRepository;
 
-        public EmployeesController(IGenericRepository<Employees> genericRepository)
+        public EmployeesController(IGenericRepository<Employees> genericRepository, IApplicantsRepository applicantsRepository)
         {
             _genericRepository = genericRepository;
+            _applicantsRepository = applicantsRepository;
         }
 
         [HttpGet]
@@ -32,12 +37,41 @@ namespace StepCore.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Employees Employees)
+        public async Task<IActionResult> Create(Applicants applicants)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            await _genericRepository.CreateAsync(Employees);
-            return Ok(await _genericRepository.SaveAsync());
+
+            var resultApplicant =  await _applicantsRepository.GetByIdAsync(applicants.Id);
+            var applicant = resultApplicant.Data;
+            var newEmployee = new Employees();
+            if (resultApplicant.Success)
+            {
+                
+                applicant.Status = (int)Enums.Entities.Status.DISABLE;
+                 _applicantsRepository.Update(applicant);
+
+                newEmployee.JobPositionsId = applicant.JobPositionsId;
+                newEmployee.MonthSalary = applicant.SalaryAspiration;
+                newEmployee.Name = applicant.Name;
+                newEmployee.DocumentNumber = applicant.DocumentNumber;
+                newEmployee.DateOfAdmission = DateTime.Now;
+                newEmployee.Department = applicant.Department;
+            }
+            var result = new TaskResult<bool>();
+        
+            try
+            {
+                await _genericRepository.CreateAsync(newEmployee);
+                result.Data = await _genericRepository.SaveAsync();
+            }
+            catch (Exception e)
+            {
+
+                result.AddErrorMessage(e.Message);
+            }
+            
+            return Ok(result);
         }
 
         [HttpPut("{id}")]

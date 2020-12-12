@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using StepCore.Entities;
+using StepCore.Entities.Framework;
 using StepCore.Framework;
 using StepCore.Services.Interfaces;
 using System.Collections.Generic;
@@ -16,12 +17,15 @@ namespace StepCore.Services.Repositories
         private readonly ILogger<GenericRepository<Applicants>> _logger;
         private readonly StepCoreContext _stepCoreContext;
         private readonly IRolesRepository _rolesRepository;
+        private readonly IGenericRepository<JobPositions> _jobPositionRepository;
 
-        public ApplicantsRepository(ILogger<GenericRepository<Applicants>> logger, StepCoreContext stepCoreContext, IRolesRepository rolesRepository) : base(logger, stepCoreContext)
+        public ApplicantsRepository(ILogger<GenericRepository<Applicants>> logger, StepCoreContext stepCoreContext, IRolesRepository rolesRepository,
+                                    IGenericRepository<JobPositions> jobPositionRepository) : base(logger, stepCoreContext)
         {
             _logger = logger;
             _stepCoreContext = stepCoreContext;
             _rolesRepository = rolesRepository;
+            _jobPositionRepository = jobPositionRepository;
         }
 
         public async Task<TaskResult<bool>> AddCompentenciesRel(List<ApplicantsCompentencies> applicantsCompentencies)
@@ -78,24 +82,20 @@ namespace StepCore.Services.Repositories
             var result = new TaskResult<List<Applicants>>();
             var isAdmin = await _rolesRepository.IsInRole(RolesConstants.ADMIN, currentUser.Id);
 
-
             var applicants = _stepCoreContext
                 .Applicants
-                .Where(e => e.UsersId == currentUser.Id || isAdmin)
+                .Where(e => (e.UsersId == currentUser.Id || isAdmin) && e.Status == (int)Enums.Entities.Status.ENABLE)
                 .ToList();
-
-
-
 
             applicants.ForEach((Applicants appl) =>
             {
                 appl.LaborExperiences = this.GetApplicantLaborExperiences(appl.Id);
                 appl.Compentencies = this.GetApplicantCompentencies(appl.Id);
                 appl.Trainings = this.GetApplicantTrainings(appl.Id);
+                appl.JobPositions = _jobPositionRepository.GetByIdAsync(appl.JobPositionsId).Result.Data;
             });
 
             result.Data = applicants;
-
             return result;
         }
 
