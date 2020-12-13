@@ -142,11 +142,5 @@ namespace StepCore.Controllers
             return Ok(result);
         }
 
-        //[HttpGet("users")]
-        //public async Task<IActionResult> Get()
-        //{
-        //    var result = await _usersRepository.GetWithRolesAsync();
-        //    return Ok(result);
-        //}
     }
 }

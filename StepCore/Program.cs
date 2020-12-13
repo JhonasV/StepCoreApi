@@ -16,15 +16,21 @@ namespace StepCore
             CreateHostBuilder(args).Build().Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                }).ConfigureAppConfiguration((builderContext, config) =>
-                {
-                    config.AddJsonFile($"appsettings.Production.json", optional: false, reloadOnChange: true);
+        public static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            return Host.CreateDefaultBuilder(args)
+               .ConfigureWebHostDefaults(webBuilder =>
+               {
+                   webBuilder.UseStartup<Startup>();
+               }).ConfigureAppConfiguration(AppConfiguration);
+        }
+           
+        public static void AppConfiguration(HostBuilderContext builderContext, IConfigurationBuilder configuration)
+        {
 
-                });           
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+          
+            configuration.AddJsonFile($"appsettings.{environment ?? Environments.Production}.json", optional: false, reloadOnChange: true);
+        }
     }
 }
