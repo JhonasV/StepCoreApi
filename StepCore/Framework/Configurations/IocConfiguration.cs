@@ -1,10 +1,13 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Scrutor;
+using StepCore.Data.Models;
 using StepCore.Entities;
+using StepCore.Framework.Models;
 using StepCore.Framework.Security;
 using StepCore.Services.Interfaces;
 using StepCore.Services.Repositories;
+using System;
 
 namespace StepCore.Framework.Configurations
 {
@@ -12,15 +15,18 @@ namespace StepCore.Framework.Configurations
     {
         public static void Init(IConfiguration configuration, IServiceCollection services)
         {
-            services.AddScoped<StepCoreContext, StepCoreContext>();
+            var seedConfig = configuration.GetSection(nameof(SeedConfig)).Get<SeedConfig>();
 
-            services.Scan(x => x.FromAssemblyOf<StepCoreContext>()
-            .AddClasses()
-            .UsingRegistrationStrategy(RegistrationStrategy.Skip)
-            .AsMatchingInterface()
-            .WithScopedLifetime());
+            if (seedConfig == null)
+            {
+                throw new Exception($"The configuration for {nameof(SeedConfig)} was no supply");
+            }
+
+            services.AddSingleton(seedConfig);
+
 
             // Dependecies Injection
+            services.AddScoped<StepCoreContext, StepCoreContext>();
             services.AddTransient<ICompentenciesRepository, CompentenciesRespository>();
             services.AddTransient<IGenericRepository<Languages>, GenericRepository<Languages>>();
             services.AddTransient<IGenericRepository<Trainings>, GenericRepository<Trainings>>();

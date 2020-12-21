@@ -31,7 +31,7 @@ namespace StepCore.Controllers
         {
             var currentUser = this.CurrentUser();
             currentUser.Roles = await _usersRepository.GetUserRolesAsync(currentUser.Id);
-            var result = await _applicantsRepository.GetWithIncludes(currentUser);
+            var result = await _applicantsRepository.GetWithIncludesAsync(currentUser);
             return Ok(result);
         }
 
@@ -56,7 +56,7 @@ namespace StepCore.Controllers
                 return Ok(result);
             }
             model.ApplicantsTrainings = model.ApplicantsTrainings.Select((item) => new ApplicantsTrainings { ApplicantsId = result.Data, TrainingsId = item.TrainingsId }).ToList();
-            var appTrainResult = await _applicantsRepository.AddTrainingsRel(model.ApplicantsTrainings);
+            var appTrainResult = await _applicantsRepository.AddTrainingsRelAsync(model.ApplicantsTrainings);
 
             if (!appTrainResult.Success)
             {
@@ -64,7 +64,7 @@ namespace StepCore.Controllers
             }
 
             model.ApplicantsCompentencies = model.ApplicantsCompentencies.Select((item) => new ApplicantsCompentencies { ApplicantsId = result.Data, CompentenciesId = item.CompentenciesId }).ToList();
-            var appCompResult = await _applicantsRepository.AddCompentenciesRel(model.ApplicantsCompentencies);
+            var appCompResult = await _applicantsRepository.AddCompentenciesRelAsync(model.ApplicantsCompentencies);
 
             if (!appCompResult.Success)
             {
@@ -72,7 +72,7 @@ namespace StepCore.Controllers
             }
 
             model.ApplicantsLaborExperiences = model.ApplicantsLaborExperiences.Select((item) => new ApplicantsLaborExperiences { ApplicantsId = result.Data, LaborExperiencesId = item.LaborExperiencesId }).ToList();
-            var appLabExpResult = await _applicantsRepository.AddLaborExperiencesRel(model.ApplicantsLaborExperiences);
+            var appLabExpResult = await _applicantsRepository.AddLaborExperiencesRelAsync(model.ApplicantsLaborExperiences);
 
             if (!appLabExpResult.Success)
             {
@@ -115,7 +115,7 @@ namespace StepCore.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            return Ok(await _applicantsRepository.AddCompentenciesRel(applicantsCompentencies));
+            return Ok(await _applicantsRepository.AddCompentenciesRelAsync(applicantsCompentencies));
         }
 
 
@@ -125,7 +125,7 @@ namespace StepCore.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            return Ok(await _applicantsRepository.AddTrainingsRel(applicantsTrainings));
+            return Ok(await _applicantsRepository.AddTrainingsRelAsync(applicantsTrainings));
         }
 
         [HttpPost("laborexperiences")]
@@ -134,7 +134,7 @@ namespace StepCore.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            return Ok(await _applicantsRepository.AddLaborExperiencesRel(applicantsLaborExperiences));
+            return Ok(await _applicantsRepository.AddLaborExperiencesRelAsync(applicantsLaborExperiences));
         }
 
         [HttpDelete("compentencies/{id}")]
@@ -143,7 +143,7 @@ namespace StepCore.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            return Ok(await _applicantsRepository.RemoveApplicantCompentenciesRel(id));
+            return Ok(await _applicantsRepository.RemoveApplicantCompentenciesRelAsync(id));
         }
 
 
@@ -153,7 +153,7 @@ namespace StepCore.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            return Ok(await _applicantsRepository.RemoveApplicantTrainingsRel(id));
+            return Ok(await _applicantsRepository.RemoveApplicantTrainingsRelAsync(id));
         }
 
         [HttpDelete("laborexperiences/{id}")]
@@ -162,7 +162,7 @@ namespace StepCore.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            return Ok(await _applicantsRepository.RemoveApplicantTrainingsRel(id));
+            return Ok(await _applicantsRepository.RemoveApplicantTrainingsRelAsync(id));
         }
     }
 }

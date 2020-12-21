@@ -17,6 +17,8 @@
     <Compile Remove="Migrations\20201018190933_Remove Users FK on Role Entite.Designer.cs" />
     <Compile Remove="Migrations\20201018191156_Remove Users FK on Role Entite.cs" />
     <Compile Remove="Migrations\20201018191156_Remove Users FK on Role Entite.Designer.cs" />
+    <Compile Remove="Migrations\20201221024227_initial migration aws.cs" />
+    <Compile Remove="Migrations\20201221024227_initial migration aws.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

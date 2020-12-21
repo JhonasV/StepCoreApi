@@ -86,7 +86,7 @@ namespace StepCore.Controllers
                     return BadRequest(result);
                 }
    
-                var roleAdded = await _usersRepository.AddUserRole(roleResult.Data.Id, user.Id);
+                var roleAdded = await _usersRepository.AddUserRoleAsync(roleResult.Data.Id, user.Id);
                 if (!roleAdded)
                 {
                     result.AddErrorMessage($"No se pudo agregar el rol {roleResult.Data.Name} al usuario {user.UserName}");
@@ -121,7 +121,7 @@ namespace StepCore.Controllers
                 return BadRequest(roleResult);
             }
 
-            var added = await _usersRepository.AddUserRole(roleResult.Data.Id, userResult.Data.Id);
+            var added = await _usersRepository.AddUserRoleAsync(roleResult.Data.Id, userResult.Data.Id);
             if (!added)
             {
                 result.AddErrorMessage($"Error al agregar el rol {model.RoleName} al usuario {userResult.Data.UserName}");
@@ -137,8 +137,10 @@ namespace StepCore.Controllers
         {
             var currentUser =  this.CurrentUser();
             currentUser.Roles = await _usersRepository.GetUserRolesAsync(currentUser.Id);
-            var result = new TaskResult<Users>();
-            result.Data = currentUser;
+            var result = new TaskResult<Users>
+            {
+                Data = currentUser
+            };
             return Ok(result);
         }
 

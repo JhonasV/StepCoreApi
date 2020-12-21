@@ -22,7 +22,7 @@ namespace StepCore.Services.Repositories
            _stepCoreContext = stepCoreContext;
         }
 
-        public async Task<bool> AddUserRole(int roleId, int userId)
+        public async Task<bool> AddUserRoleAsync(int roleId, int userId)
         {
         
             await _stepCoreContext.UserRoles.AddAsync(new UserRoles { RolesId = roleId, UsersId = userId });

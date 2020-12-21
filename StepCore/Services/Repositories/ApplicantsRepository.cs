@@ -28,7 +28,7 @@ namespace StepCore.Services.Repositories
             _jobPositionRepository = jobPositionRepository;
         }
 
-        public async Task<TaskResult<bool>> AddCompentenciesRel(List<ApplicantsCompentencies> applicantsCompentencies)
+        public async Task<TaskResult<bool>> AddCompentenciesRelAsync(List<ApplicantsCompentencies> applicantsCompentencies)
         {
             var result = new TaskResult<bool>();
             try
@@ -44,7 +44,7 @@ namespace StepCore.Services.Repositories
             return result;          
         }
 
-        public async Task<TaskResult<bool>> AddLaborExperiencesRel(List<ApplicantsLaborExperiences> applicantsLaborExperiences)
+        public async Task<TaskResult<bool>> AddLaborExperiencesRelAsync(List<ApplicantsLaborExperiences> applicantsLaborExperiences)
         {
             var result = new TaskResult<bool>();
             try
@@ -60,7 +60,7 @@ namespace StepCore.Services.Repositories
             return result;
         }
 
-        public async Task<TaskResult<bool>> AddTrainingsRel(List<ApplicantsTrainings> applicantsTrainings)
+        public async Task<TaskResult<bool>> AddTrainingsRelAsync(List<ApplicantsTrainings> applicantsTrainings)
         {
             var result = new TaskResult<bool>();
             try
@@ -76,7 +76,7 @@ namespace StepCore.Services.Repositories
             return result;
         }
 
-        public async Task<TaskResult<List<Applicants>>> GetWithIncludes(Users currentUser)
+        public async Task<TaskResult<List<Applicants>>> GetWithIncludesAsync(Users currentUser)
         {
             _logger.LogInformation("Retrieve Applicants information with related entities objects");
             var result = new TaskResult<List<Applicants>>();
@@ -131,27 +131,27 @@ namespace StepCore.Services.Repositories
                 .ToList();
         }
 
-        public async Task<bool> RemoveApplicantTrainingsRel(int applicationTrainingsId)
+        public async Task<bool> RemoveApplicantTrainingsRelAsync(int applicationTrainingsId)
         {
             return await _stepCoreContext
                 .ApplicantsTrainings
                 .DeleteFromQueryAsync(e => new ApplicantsTrainings { Id = applicationTrainingsId }) > 0;
         }
 
-        public async Task<bool> RemoveApplicantCompentenciesRel(int applicantCompetenciesId)
+        public async Task<bool> RemoveApplicantCompentenciesRelAsync(int applicantCompetenciesId)
         {
              return await _stepCoreContext
                 .ApplicantsCompentencies
                 .DeleteFromQueryAsync(e => new ApplicantsCompentencies { Id = applicantCompetenciesId }) > 0;
         }
 
-        public async Task<bool> RemoveApplicantLaborExperiencesRel(int laborExperiencesId)
+        public async Task<bool> RemoveApplicantLaborExperiencesRelAsync(int laborExperiencesId)
         {
             return await _stepCoreContext.ApplicantsLaborExperiences
             .DeleteFromQueryAsync(e => new ApplicantsLaborExperiences { Id = laborExperiencesId}) > 0;
         }
 
-        public async Task<TaskResult<int>> CreateAsync(Applicants applicants)
+        new public async Task<TaskResult<int>> CreateAsync(Applicants applicants)
         {
             var result = new TaskResult<int>();
             try
