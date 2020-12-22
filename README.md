@@ -26,15 +26,15 @@ Managment for:
 
 ## Installation
 
-Restore the dependecies
+Restore the dependecies in the folder `StepCoreApi` root
 
 ```bash
 dotnet restore
 ```
-Add Sql Server connection string in  `appsettings.development.json` file
+Add Sql Server connection string in  `StepCore/appsettings.development.json` file
 
 ```bash
- "DefaultConnection": "Your connection string here"
+ "DefaultConnection": "Your Sql Server connection string here"
 ```
 Go in the root of the folder `StepCoreApi\StepCore.Data` and setup the database
 
