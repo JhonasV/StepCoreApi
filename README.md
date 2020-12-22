@@ -23,7 +23,6 @@ Managment for:
 - ASP.NET Core 5 API 
 - EntityFramework Core
 - JWT Bearer Token
-- 
 
 ## Installation
 
@@ -39,11 +38,12 @@ Add Sql Server connection string in  `appsettings.development.json` file
 ```
 Go in the root of the folder `StepCoreApi\StepCore.Data` and setup the database
 
-### NUGET
+
 ```bash
 Update-database
 ```
-### EF CORE LI
+OR  
+### EF CORE CLI
 
 ```bash
 dotnet ef database update
