@@ -5,12 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static StepCore.Data.Framework.Constants;
 
 namespace StepCore.Data
 {
     public static class Seed
     {
-        public static void Initialiaze(StepCoreContext stepCoreContext, SeedConfig _seedConfig)
+        public static void Initialiaze(StepCoreContext stepCoreContext, SeedSettings _seedConfig)
         {
             var usersExists = stepCoreContext.Users.Any();
 
@@ -19,12 +20,12 @@ namespace StepCore.Data
 
                 var roleAdmin = new Roles
                 {
-                    Name = _seedConfig.RoleAdmin
+                    Name = RolesConstants.ADMIN
                 };
 
                 var roleApplicant = new Roles
                 {
-                    Name = _seedConfig.RoleApplicant
+                    Name = RolesConstants.APPLICANT
                 };
 
                 var roles = new List<Roles>

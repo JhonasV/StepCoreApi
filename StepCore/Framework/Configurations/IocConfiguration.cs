@@ -15,17 +15,14 @@ namespace StepCore.Framework.Configurations
     {
         public static void Init(IConfiguration configuration, IServiceCollection services)
         {
-            var seedConfig = configuration.GetSection(nameof(SeedConfig)).Get<SeedConfig>();
+            var seedConfig = configuration.GetSection(nameof(SeedSettings)).Get<SeedSettings>();
 
             if (seedConfig == null)
             {
-                throw new Exception($"The configuration for {nameof(SeedConfig)} was no supply");
+                throw new Exception($"The configuration for {nameof(SeedSettings)} was not supply");
             }
 
             services.AddSingleton(seedConfig);
-
-
-            // Dependecies Injection
             services.AddScoped<StepCoreContext, StepCoreContext>();
             services.AddTransient<ICompentenciesRepository, CompentenciesRespository>();
             services.AddTransient<IGenericRepository<Languages>, GenericRepository<Languages>>();

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace StepCore.Framework
+namespace StepCore.Data.Framework
 {
     public static class Constants
     {

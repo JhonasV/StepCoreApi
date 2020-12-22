@@ -26,7 +26,7 @@ namespace StepCore
                 try
                 {
                     var context = services.GetRequiredService<StepCoreContext>();
-                    var seedConfig = services.GetRequiredService<SeedConfig>();
+                    var seedConfig = services.GetRequiredService<SeedSettings>();
                     context.Database.Migrate();
                     Seed.Initialiaze(context, seedConfig);
                 }
