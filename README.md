@@ -60,6 +60,10 @@ App Running must be running in ports:
 ```bash
  localhost:5001 OR localhost:5000
 ```
-
+Default user with admin role
+```bash
+ username: admin
+ password: admin
+```
 
 
