@@ -1,6 +1,12 @@
 # StepCore
 StepCore is a RRHH hire management system
 
+Client made with Flutter+Dart
+
+```dash
+https://github.com/JhonasV/Step
+````
+
 ## Features
 Managment for:
 - Language
