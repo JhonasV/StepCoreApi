@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static StepCore.Framework.Constants;
+using static StepCore.Data.Framework.Constants;
 
 namespace StepCore.Services.Repositories
 {
